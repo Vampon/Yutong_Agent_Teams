@@ -1,0 +1,51 @@
+{
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\Yutong Agent Teams.exe",
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-packaged-98dd1495",
+  "sha256": "71aef77ed9fbac0f49056ff0485c9651619680bd298b36445e2df74c3773a5d9",
+  "checks": [
+    {
+      "check": "--self-test",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "version": "0.2.0",
+        "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-packaged-98dd1495",
+        "agents": 5
+      }
+    },
+    {
+      "check": "--smoke-gui",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "title": "Yutong Agent Teams",
+        "backend": "edgechromium"
+      }
+    },
+    {
+      "check": "scoped-http-connect",
+      "ok": true
+    },
+    {
+      "check": "windowed-exe-mcp-stdio",
+      "ok": true
+    },
+    {
+      "check": "windowed-mcp-tool-call",
+      "ok": true
+    },
+    {
+      "check": "bundled-python-launches-external-command",
+      "ok": true
+    },
+    {
+      "check": "frozen-claude-live-mcp-reply",
+      "ok": true
+    },
+    {
+      "check": "frozen-claude-session-memory",
+      "ok": true
+    }
+  ],
+  "ok": true
+}

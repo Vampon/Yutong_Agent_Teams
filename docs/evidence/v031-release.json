@@ -1,0 +1,18 @@
+{
+  "version": "0.3.1",
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\0.3.1\\Yutong Agent Teams.exe",
+  "bytes": 17516616,
+  "sha256": "7365ac1c568aa35972c90ba712a91762250b4c788a61e266feec03248b355ca9",
+  "file_version": "0.3.1.0",
+  "tests": {
+    "unit": 53,
+    "packaged": 7,
+    "ui_smoke": 11,
+    "permission_regression": 10,
+    "claude_live_progress": true
+  },
+  "notes": [
+    "Built in a versioned directory because the old EXE was running.",
+    "Daily user configuration and collaboration history were not modified."
+  ]
+}

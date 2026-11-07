@@ -1,0 +1,18 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\deepseek-model-b57a2447",
+  "ok": false,
+  "turns": [
+    {
+      "status": "failed",
+      "error": "Internal error: turn failed: Request timed out.",
+      "provider": "huoshan",
+      "model": "deepseek-v4-1-flash-260910",
+      "session_id": "633dbd82-13ab-43b6-885d-4af0f9d5b4e5",
+      "resume_supported": true,
+      "tools": [],
+      "replied": false,
+      "memory_returned": false
+    }
+  ],
+  "approvals": []
+}

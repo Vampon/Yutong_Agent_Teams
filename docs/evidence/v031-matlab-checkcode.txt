@@ -1,0 +1,5 @@
+
+	Sponsored License -- for use in support of a program or activity sponsored by MathWorks.
+	Not for government, commercial or other non-sponsored organizational use.
+
+{"id":"NASGU","message":"赋给变量的值可能未使用。","fix":0,"line":29,"column":[17,24]}

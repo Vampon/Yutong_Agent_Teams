@@ -1,0 +1,17 @@
+{
+  "1024": {
+    "columns": 2,
+    "firstCardHeight": 173.1875,
+    "overflow": false
+  },
+  "1440": {
+    "columns": 3,
+    "firstCardHeight": 173.1875,
+    "overflow": false
+  },
+  "1920": {
+    "columns": 4,
+    "firstCardHeight": 173.1875,
+    "overflow": false
+  }
+}

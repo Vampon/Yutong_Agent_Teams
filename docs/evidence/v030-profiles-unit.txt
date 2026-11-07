@@ -1,0 +1,15 @@
+test_role_override_and_conversation_isolation_on_wire (test_profiles.ADPProfileTest) ... ok
+test_distinct_identity_session_memory_and_prompt (test_profiles.ProfileRuntimeTest) ... ok
+test_live_permission_change_resolves_wait_and_keeps_session (test_profiles.ProfileRuntimeTest) ... ok
+test_source_edit_is_blocked_while_a_clone_runs (test_profiles.ProfileRuntimeTest) ... ok
+test_capability_gate_and_adp_explicit_opt_in (test_profiles.ProfilesTest) ... ok
+test_connection_and_credentials_are_inherited_not_copied (test_profiles.ProfilesTest) ... ok
+test_duplicate_and_cyclic_or_changed_source_cannot_replace_members (test_profiles.ProfilesTest) ... ok
+test_member_cannot_configure_permissions_or_create_profiles (test_profiles.ProfilesTest) ... ok
+test_permission_inheritance_persistence_and_atomic_validation (test_profiles.ProfilesTest) ... ok
+test_policy_does_not_resolve_questions_or_reviews (test_profiles.ProfilesTest) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.000s
+
+OK

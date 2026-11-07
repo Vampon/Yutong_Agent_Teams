@@ -1,0 +1,16 @@
+{
+  "version": "0.3.0",
+  "file_version": [
+    0,
+    3,
+    0,
+    0
+  ],
+  "sha256": "e8f3cb59dca83b41d92450589f948f617b4f9d5d27fb45ff294c1c04f8f91df7",
+  "bytes": 17508789,
+  "packaged_checks": 7,
+  "tests": 46,
+  "profile_tests_after_audit_change": 10,
+  "real_claude_personas": 2,
+  "real_claude_turns": 6
+}

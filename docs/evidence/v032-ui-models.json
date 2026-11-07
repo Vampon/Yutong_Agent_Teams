@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "checks": [
+    "model source and route fields persist after save/reload",
+    "configured route is visible in check result without credentials"
+  ],
+  "errors": []
+}

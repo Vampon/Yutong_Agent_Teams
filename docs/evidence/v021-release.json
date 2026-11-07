@@ -1,0 +1,13 @@
+{
+  "version": "0.2.1",
+  "sha256": "ff06ad1ed1f3c6de814887bfd497560e1975a27d294c63a80f78d2cf6740f36d",
+  "bytes": 17500452,
+  "packaged_checks": 6,
+  "embedded_icons": 9,
+  "native_icon_size": [
+    32,
+    32
+  ],
+  "native_corner_alpha": 0,
+  "tests": 36
+}

@@ -1,0 +1,49 @@
+{
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\0.3.1\\Yutong Agent Teams.exe",
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-packaged-66ca3852",
+  "sha256": "7365ac1c568aa35972c90ba712a91762250b4c788a61e266feec03248b355ca9",
+  "checks": [
+    {
+      "check": "--self-test",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "version": "0.3.1",
+        "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-packaged-66ca3852",
+        "agents": 5
+      }
+    },
+    {
+      "check": "--smoke-gui",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "title": "Yutong Agent Teams",
+        "backend": "edgechromium",
+        "logo_loaded": true,
+        "agent_icons_loaded": true
+      }
+    },
+    {
+      "check": "scoped-http-connect",
+      "ok": true
+    },
+    {
+      "check": "frozen-shared-runtime-personas-restored",
+      "ok": true
+    },
+    {
+      "check": "windowed-exe-mcp-stdio",
+      "ok": true
+    },
+    {
+      "check": "windowed-mcp-tool-call",
+      "ok": true
+    },
+    {
+      "check": "bundled-python-launches-external-command",
+      "ok": true
+    }
+  ],
+  "ok": true
+}

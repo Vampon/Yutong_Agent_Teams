@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "checks": [
+    "ADP cloning disabled by default",
+    "explicit SystemRole capability opt-in enables creation",
+    "ADP personas do not expose local tool permission controls"
+  ],
+  "realADPApplicationCalled": false
+}

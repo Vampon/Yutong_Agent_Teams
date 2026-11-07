@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "checks": [
+    "four local brand icons and unknown-brand fallback",
+    "member picker stays inside cards at 1440/1024 widths and creates the selected team",
+    "failed image shows initial without broken-image placeholder",
+    "no external asset requests or JavaScript errors"
+  ],
+  "errors": []
+}

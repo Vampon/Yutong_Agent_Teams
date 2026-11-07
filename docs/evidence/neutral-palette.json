@@ -1,0 +1,12 @@
+{
+  "palette": {
+    "sidebar": "rgb(245, 245, 245)",
+    "selected": "rgb(232, 232, 232)",
+    "content": "rgb(255, 255, 255)",
+    "text": "rgb(37, 37, 37)"
+  },
+  "logo": {
+    "width": 256,
+    "height": 256
+  }
+}

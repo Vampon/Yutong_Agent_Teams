@@ -1,0 +1,49 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-ccu-036d2105",
+  "mode": "real CCU kernel with local model fixture",
+  "checks": [
+    {
+      "status": "completed",
+      "error": "",
+      "read": true,
+      "reply": true,
+      "session": "20261106_141358_dc5fe9",
+      "pid": 9816
+    },
+    {
+      "status": "completed",
+      "error": "",
+      "read": true,
+      "reply": true,
+      "session": "20261106_141358_dc5fe9",
+      "pid": 9816
+    }
+  ],
+  "ok": true,
+  "model_calls": [
+    {
+      "tools_present": true,
+      "remembered": false
+    },
+    {
+      "tools_present": true,
+      "remembered": false
+    },
+    {
+      "tools_present": true,
+      "remembered": false
+    },
+    {
+      "tools_present": true,
+      "remembered": true
+    },
+    {
+      "tools_present": true,
+      "remembered": true
+    },
+    {
+      "tools_present": true,
+      "remembered": true
+    }
+  ]
+}

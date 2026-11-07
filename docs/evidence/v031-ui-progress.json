@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "checks": [
+    "auto-growing composer, no blue focus ring or resize handle; draft DOM and selection survive streaming",
+    "history reading position is retained during live updates",
+    "two live members expose text, tool input/result and approval state; detail stays live and completed runs collapse",
+    "second-level timestamps, distinct expandable task delegation and stable causal message/run order"
+  ],
+  "errors": []
+}

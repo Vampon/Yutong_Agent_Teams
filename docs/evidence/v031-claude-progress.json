@@ -1,0 +1,41 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\progress-live-cb9050d6",
+  "ok": true,
+  "observed_live": true,
+  "status": "completed",
+  "error": "",
+  "blocks": [
+    {
+      "kind": "text",
+      "name": null,
+      "status": null,
+      "call_id": null
+    },
+    {
+      "kind": "tool",
+      "name": "mcp__teams__teams_context_get",
+      "status": "completed",
+      "call_id": "call_bc782d13b77d48d0a8b06cde"
+    },
+    {
+      "kind": "tool",
+      "name": "mcp__teams__teams_inbox_read",
+      "status": "completed",
+      "call_id": "call_1219c0a9490f4e67bef2c237"
+    },
+    {
+      "kind": "tool",
+      "name": "mcp__teams__teams_reply",
+      "status": "completed",
+      "call_id": "call_63ebb5b597ce4ef38cbda553"
+    },
+    {
+      "kind": "text",
+      "name": null,
+      "status": null,
+      "call_id": null
+    }
+  ],
+  "public_text": true,
+  "tool_results": true
+}

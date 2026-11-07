@@ -1,0 +1,24 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-matlab-memory-369cffac",
+  "checks": [
+    {
+      "status": "completed",
+      "read": true,
+      "replied": true,
+      "reply": "READY",
+      "session_id": "32cb7304aeed40988fd50989329491ef",
+      "error": "",
+      "pid": 27496
+    },
+    {
+      "status": "completed",
+      "read": true,
+      "replied": true,
+      "reply": "memory_5bccef5f",
+      "session_id": "32cb7304aeed40988fd50989329491ef",
+      "error": "",
+      "pid": 27496
+    }
+  ],
+  "ok": true
+}

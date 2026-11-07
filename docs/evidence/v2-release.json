@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\Yutong Agent Teams.exe",
+  "bytes": 17319147,
+  "sha256": "71aef77ed9fbac0f49056ff0485c9651619680bd298b36445e2df74c3773a5d9",
+  "automated_tests": 34,
+  "ui_checks": 10,
+  "packaged_checks": 8,
+  "standalone_sdk": "passed",
+  "known_blocks": [
+    "DeepSeek API key missing",
+    "CCU configured model connection error",
+    "Tencent ADP credentials unavailable",
+    "MATLAB Sponsored License is not a commercial license"
+  ]
+}

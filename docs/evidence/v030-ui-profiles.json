@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "checks": [
+    "two Claude personas created through editable presets, one shared runtime",
+    "persona instructions persist across reload",
+    "global policy, source inheritance and persona override apply independently",
+    "both personas join the same group; new-group review default follows settings",
+    "compact persona cards fit at 1440 and 1024 without overflowing controls"
+  ],
+  "errors": [],
+  "remoteRequests": []
+}

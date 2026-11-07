@@ -1,0 +1,251 @@
+.run-card {
+  margin: 0 0 20px 42px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.run-card > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  font-size: 11px;
+}
+.run-card > summary::-webkit-details-marker,
+.trace-tool > summary::-webkit-details-marker,
+.delegation summary::-webkit-details-marker {
+  display: none;
+}
+.run-card > summary > .avatar {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border-radius: 7px;
+}
+.run-card > summary > strong {
+  font-weight: 550;
+}
+.run-card > summary > time {
+  margin-left: auto;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.run-card > summary > .icon:last-child,
+.trace-tool summary > .icon:last-child,
+.delegation summary > .icon:last-child {
+  width: 12px;
+  height: 12px;
+  color: var(--subtle);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.run-card[open] > summary > .icon:last-child,
+.trace-tool[open] > summary > .icon:last-child,
+.delegation details[open] > summary > .icon:last-child {
+  transform: rotate(90deg);
+}
+.run-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.run-state .icon {
+  width: 12px;
+  height: 12px;
+}
+.run-state .pulse {
+  width: 5px;
+  height: 5px;
+}
+.run-state.waiting {
+  color: var(--warn);
+}
+.run-state.failed,
+.run-state.interrupted,
+.run-error {
+  color: var(--error);
+}
+.run-card-body {
+  border-top: 1px solid var(--line);
+}
+.run-stream {
+  padding: 10px 14px;
+  max-height: 200px;
+  overflow: auto;
+  overflow-anchor: none;
+}
+.trace-text {
+  font-size: 12px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  margin: 4px 0 12px;
+}
+.trace-text:last-child {
+  margin-bottom: 2px;
+}
+.trace-text p {
+  line-height: 1.75;
+}
+.trace-status {
+  font-size: 11px;
+  color: var(--subtle);
+  margin: 5px 0;
+}
+.trace-tool {
+  border-left: 2px solid var(--line-strong);
+  margin: 7px 0;
+}
+.trace-tool > summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  list-style: none;
+  padding: 5px 8px;
+  font-size: 11px;
+}
+.trace-tool > summary > .icon:first-child {
+  width: 13px;
+  height: 13px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.trace-tool > summary > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: Consolas, "Segoe UI", monospace;
+}
+.trace-tool small {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.trace-tool-body {
+  padding: 3px 10px 8px;
+}
+.trace-tool-body h4 {
+  font-size: 10px;
+  color: var(--subtle);
+  font-weight: 500;
+  margin: 8px 0 4px;
+}
+.trace-tool-body pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    11px/1.65 Consolas,
+    "Microsoft YaHei",
+    monospace;
+  max-height: 240px;
+  overflow: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0;
+}
+.run-card footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px 7px 14px;
+  font-size: 10px;
+  color: var(--subtle);
+}
+.run-waiting {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 5px 12px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 11px;
+}
+.run-waiting > .icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.run-waiting > span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.run-error {
+  padding: 7px 14px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.detail-stream {
+  max-height: 52vh;
+  padding: 6px 0 12px;
+}
+.run-detail .detail-meta {
+  flex-wrap: wrap;
+}
+.run-detail .trace-text {
+  font-size: 13px;
+}
+.run-result {
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.run-result > summary {
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.delegation {
+  margin: 0 0 22px 42px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line-strong);
+}
+.delegation summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 11px;
+}
+.delegation summary > .icon:first-child {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.delegation summary > span {
+  flex: 1;
+  min-width: 0;
+}
+.delegation summary b {
+  display: block;
+  font-weight: 500;
+  margin-top: 5px;
+  color: var(--text);
+}
+.delegation summary > time {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.delegation-body {
+  padding: 12px 0;
+  font-size: 12px;
+}
+.conversation {
+  overflow-anchor: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}

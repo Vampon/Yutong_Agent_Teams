@@ -1,0 +1,53 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\profiles-live-eb16e8c4",
+  "checks": [
+    "two distinct native Claude sessions",
+    "independent persona instructions and second-turn memory",
+    "real peer message and reply between two Claude personas"
+  ],
+  "ok": true,
+  "runs": [
+    {
+      "actor_id": "requirements",
+      "status": "completed",
+      "error": ""
+    },
+    {
+      "actor_id": "developer",
+      "status": "completed",
+      "error": ""
+    },
+    {
+      "actor_id": "requirements",
+      "status": "completed",
+      "error": ""
+    },
+    {
+      "actor_id": "developer",
+      "status": "completed",
+      "error": ""
+    },
+    {
+      "actor_id": "requirements",
+      "status": "completed",
+      "error": ""
+    },
+    {
+      "actor_id": "developer",
+      "status": "completed",
+      "error": ""
+    }
+  ],
+  "sessions": [
+    {
+      "actor_id": "requirements",
+      "provider_id": "6479c85f-a47a-4b82-871a-09891a739a8d",
+      "turns": 3
+    },
+    {
+      "actor_id": "developer",
+      "provider_id": "70618256-f4b2-42ee-b869-57a3d302bb7a",
+      "turns": 3
+    }
+  ]
+}

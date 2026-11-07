@@ -1,0 +1,18 @@
+{
+  "version": "0.3.2",
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\0.3.2\\Yutong Agent Teams.exe",
+  "bytes": 17695756,
+  "sha256": "cb50abf82a513eb119de881167fc5f1e3e47a6623396af13061636fa6688c27d",
+  "file_version": "0.3.2.0",
+  "tests": {
+    "ui_model_settings": true,
+    "ui_smoke": 11,
+    "deepseek_native_resume": true,
+    "deepseek_route_selection": true,
+    "unit": 61,
+    "packaged": 7,
+    "session_regression": 9,
+    "deepseek_live_collaboration": false
+  },
+  "limitation": "Harness model request still timed out in the latest probe; user reports original Web works with VPN off."
+}

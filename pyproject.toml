@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yutong-agent-teams"
+version = "0.3.2"
+description = "Desktop collaboration control plane for independently operated agents"
+requires-python = ">=3.8"
+dependencies = ["pywebview==5.4", "httpx==0.28.1", "PyYAML==6.0.2"]
+
+[project.scripts]
+yutong-agent-teams = "yutong_teams.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["yutong_teams*"]
+
+[tool.setuptools.package-data]
+yutong_teams = ["web/*.html", "web/*.css", "web/*.js", "web/views/*.js", "bridges/*.py", "bridges/*.m", "sdk.py"]

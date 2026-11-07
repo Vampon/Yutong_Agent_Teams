@@ -1,0 +1,127 @@
+Updated application PNG and Windows ICO (16-256 px).
+185 INFO: PyInstaller: 6.21.0, contrib hooks: 2026.6
+185 INFO: Python: 3.8.20 (conda)
+195 INFO: Platform: Windows-10-10.0.26200-SP0
+195 INFO: Python environment: D:\anaconda3\envs\llm
+199 INFO: Module search paths (PYTHONPATH):
+['D:\\Project\\Yutong Agent Teams',
+ 'D:\\anaconda3\\envs\\llm\\python38.zip',
+ 'D:\\anaconda3\\envs\\llm\\DLLs',
+ 'D:\\anaconda3\\envs\\llm\\lib',
+ 'D:\\anaconda3\\envs\\llm',
+ 'D:\\anaconda3\\envs\\llm\\lib\\site-packages',
+ 'D:\\Project\\Yutong Agent Teams']
+776 INFO: Appending 'binaries' from .spec
+776 INFO: Appending 'datas' from .spec
+779 INFO: checking Analysis
+795 INFO: Building because excludes changed
+795 INFO: Looking for Python shared library...
+795 INFO: Using Python shared library: D:\anaconda3\envs\llm\python38.dll
+795 INFO: Running Analysis Analysis-00.toc
+795 INFO: Target bytecode optimization level: 0
+795 INFO: Initializing module dependency graph...
+796 INFO: Initializing module graph hook caches...
+809 INFO: Analyzing modules for base_library.zip ...
+1625 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+2009 INFO: Processing standard module hook 'hook-math.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+2432 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+2775 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+2950 INFO: Caching module dependency graph...
+2982 INFO: Analyzing D:\Project\Yutong Agent Teams\launch.py
+3096 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+3203 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+3245 INFO: Processing standard module hook 'hook-sqlite3.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+4012 INFO: Processing standard module hook 'hook-certifi.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+4114 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+4217 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+4538 INFO: Processing standard module hook 'hook-anyio.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+5043 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+5045 INFO: SetuptoolsInfo: initializing cached setuptools info...
+8409 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+8444 INFO: Processing standard module hook 'hook-webbrowser.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+8455 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+8467 INFO: Processing standard module hook 'hook-importlib_metadata.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+8480 INFO: Processing pre-safe-import-module hook 'hook-zipp.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+8577 INFO: Processing standard module hook 'hook-webview.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\webview\\__pyinstaller'
+8701 INFO: Processing standard module hook 'hook-jinja2.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9001 INFO: Processing pre-safe-import-module hook 'hook-gi.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9058 INFO: Processing standard module hook 'hook-clr.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9068 INFO: Processing standard module hook 'hook-clr_loader.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9137 INFO: Processing standard module hook 'hook-pycparser.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9437 INFO: Processing standard module hook 'hook-setuptools.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9460 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9461 INFO: Processing pre-find-module-path hook 'hook-distutils.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+9784 INFO: Processing standard module hook 'hook-distutils.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9796 INFO: Processing standard module hook 'hook-distutils.util.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9817 INFO: Processing standard module hook 'hook-_osx_support.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9833 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9873 INFO: Processing standard module hook 'hook-sysconfig.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9892 INFO: Processing pre-safe-import-module hook 'hook-jaraco.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9893 INFO: Setuptools: 'jaraco' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.jaraco'!
+9898 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9901 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9902 INFO: Processing standard module hook 'hook-importlib_resources.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+9924 INFO: Processing pre-safe-import-module hook 'hook-more_itertools.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9924 INFO: Setuptools: 'more_itertools' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.more_itertools'!
+9994 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+9994 INFO: Setuptools: 'backports' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.backports'!
+10160 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+10478 INFO: Processing standard module hook 'hook-pkg_resources.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+10824 INFO: Processing pre-safe-import-module hook 'hook-platformdirs.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+10825 INFO: Setuptools: 'platformdirs' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.platformdirs'!
+10889 INFO: Processing pre-safe-import-module hook 'hook-wheel.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+11235 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks'
+11270 INFO: Processing standard module hook 'hook-cryptography.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+D:\anaconda3\envs\llm\lib\importlib\util.py:94: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  parent = __import__(parent_name, fromlist=['__path__'])
+D:\anaconda3\envs\llm\lib\site-packages\PyInstaller\utils\hooks\__init__.py:665: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  __import__(name)
+D:\anaconda3\envs\llm\lib\importlib\util.py:94: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  parent = __import__(parent_name, fromlist=['__path__'])
+D:\anaconda3\envs\llm\lib\site-packages\PyInstaller\utils\hooks\__init__.py:665: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  __import__(name)
+D:\anaconda3\envs\llm\lib\site-packages\_pyinstaller_hooks_contrib\stdhooks\hook-cryptography.py:63: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  from cryptography.hazmat.backends.openssl.backend import backend
+12395 INFO: hook-cryptography: cryptography does not seem to be using dynamically linked OpenSSL.
+12553 INFO: Processing standard module hook 'hook-bcrypt.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+12561 INFO: Processing module hooks (post-graph stage)...
+12658 WARNING: Hidden import "importlib_resources.trees" not found!
+13017 INFO: Performing binary vs. data reclassification (96 entries)
+13027 INFO: Looking for ctypes DLLs
+13049 INFO: Analyzing run-time hooks ...
+13051 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+13053 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+13054 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+13055 INFO: Including run-time hook 'pyi_rth_setuptools.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+13056 INFO: Including run-time hook 'pyi_rth_pkgres.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+13059 INFO: Including run-time hook 'pyi_rth_cryptography_openssl.py' from 'D:\\anaconda3\\envs\\llm\\lib\\site-packages\\_pyinstaller_hooks_contrib\\rthooks'
+13069 INFO: Creating base_library.zip...
+13099 INFO: Looking for dynamic libraries
+D:\anaconda3\envs\llm\lib\site-packages\PyInstaller\building\build_main.py:227: CryptographyDeprecationWarning: Python 3.8 is no longer supported by the Python core team and support for it is deprecated in cryptography. The next release of cryptography will remove support for Python 3.8.
+  __import__(package)
+13875 INFO: Extra DLL search directories (AddDllDirectory): []
+13875 INFO: Extra DLL search directories (PATH): []
+14264 INFO: Warnings written to D:\Project\Yutong Agent Teams\build\YutongTeams\warn-YutongTeams.txt
+14339 INFO: Graph cross-reference written to D:\Project\Yutong Agent Teams\build\YutongTeams\xref-YutongTeams.html
+14363 INFO: checking PYZ
+14401 INFO: Building because D:\Project\Yutong Agent Teams\yutong_teams\runtime\supervisor.py changed
+14401 INFO: Building PYZ (ZlibArchive) D:\Project\Yutong Agent Teams\build\YutongTeams\PYZ-00.pyz
+14776 INFO: Building PYZ (ZlibArchive) D:\Project\Yutong Agent Teams\build\YutongTeams\PYZ-00.pyz completed successfully.
+14791 INFO: checking PKG
+14808 INFO: Building because toc changed
+14808 INFO: Building PKG (CArchive) Yutong Agent Teams.pkg
+18197 INFO: Building PKG (CArchive) Yutong Agent Teams.pkg completed successfully.
+18199 INFO: Bootloader D:\anaconda3\envs\llm\lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+18199 INFO: checking EXE
+18201 INFO: Rebuilding EXE-00.toc because Yutong Agent Teams.exe missing
+18201 INFO: Building EXE from EXE-00.toc
+18203 INFO: Copying bootloader EXE to D:\Project\Yutong Agent Teams\dist\0.3.1\Yutong Agent Teams.exe
+18310 INFO: Copying icon to EXE
+18417 INFO: Copying version information to EXE
+18525 INFO: Copying 0 resources to EXE
+18525 INFO: Embedding manifest in EXE
+18624 INFO: Appending PKG archive to EXE
+18763 INFO: Fixing EXE headers
+19313 INFO: Building EXE from EXE-00.toc completed successfully.
+19316 INFO: Build complete! The results are available in: D:\Project\Yutong Agent Teams\dist\0.3.1
+Output: D:\Project\Yutong Agent Teams\dist\0.3.1\Yutong Agent Teams.exe

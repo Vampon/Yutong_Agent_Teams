@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+logs/
+refs/
+.test-data/
+archives/
+dist.rar
+.env
+.env.*
+!.env.example
+.credentials.yaml
+credentials.json

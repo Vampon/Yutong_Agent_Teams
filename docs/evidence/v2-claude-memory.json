@@ -1,0 +1,24 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-claude-0a8239b4",
+  "checks": [
+    {
+      "status": "completed",
+      "read": true,
+      "replied": true,
+      "reply": "READY",
+      "session_id": "719546f0-b524-40ce-bee0-b4092c9e7e8e",
+      "error": "",
+      "pid": 18396
+    },
+    {
+      "status": "completed",
+      "read": true,
+      "replied": true,
+      "reply": "memory_9ea06e1e",
+      "session_id": "719546f0-b524-40ce-bee0-b4092c9e7e8e",
+      "error": "",
+      "pid": 18396
+    }
+  ],
+  "ok": true
+}
