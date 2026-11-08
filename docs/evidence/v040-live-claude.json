@@ -1,0 +1,34 @@
+{
+  "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\workflow-live-07c64f73",
+  "worker": "claude",
+  "checks": [
+    {
+      "check": "single-final-request",
+      "ok": true
+    },
+    {
+      "check": "one-internal-review-completed",
+      "ok": true
+    },
+    {
+      "check": "one-worker-execution",
+      "ok": true,
+      "runs": 3
+    },
+    {
+      "check": "independent-native-sessions",
+      "ok": true
+    },
+    {
+      "check": "acceptance-does-not-wake-agents",
+      "ok": true,
+      "observation_seconds": 20,
+      "final_status": "done"
+    },
+    {
+      "check": "no-pending-acceptance",
+      "ok": true
+    }
+  ],
+  "ok": true
+}

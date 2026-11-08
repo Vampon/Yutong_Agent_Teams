@@ -89,8 +89,19 @@ class AgentClient:
     def read(self, message_id):
         return self.call("delivery.ack", message_id=message_id, stage="read")
 
-    def send(self, targets, text, mode="send", client_id=None):
-        return self.call("message.send", targets=targets, text=text, mode=mode, client_id=client_id or uuid.uuid4().hex)
+    def send(self, targets, text, mode=None, client_id=None, work_id=None):
+        values = dict(targets=targets, text=text, client_id=client_id or uuid.uuid4().hex)
+        if mode:
+            values["mode"] = mode
+        if work_id:
+            values["work_id"] = work_id
+        return self.call("message.send", **values)
 
-    def reply(self, message_id, text, mode="send", client_id=None):
-        return self.call("message.reply", reply_to=message_id, text=text, mode=mode, client_id=client_id or uuid.uuid4().hex)
+    def reply(self, message_id, text, mode=None, client_id=None):
+        values = dict(reply_to=message_id, text=text, client_id=client_id or uuid.uuid4().hex)
+        if mode:
+            values["mode"] = mode
+        return self.call("message.reply", **values)
+
+    def submit_final(self, work_id, version, title, text):
+        return self.call("work.submit", work_id=work_id, version=version, title=title, text=text)

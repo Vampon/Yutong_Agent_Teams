@@ -25,7 +25,7 @@ const submit = (text) =>
 export function groupForm(s, g) {
   return dialog(
     g ? "协作设置" : "新建协作",
-    `${field("名称", input("name", g?.name || "", 'required maxlength="100" placeholder="例如：整车控制策略评审"'))}${g ? "" : field("共同目标", textarea("goal", "", 'rows="3" placeholder="希望共同完成什么？有哪些验收标准？"'))}<div class="field"><span>协作成员</span><div class="member-options">${s.config.agents.map((a) => `<label class="member-option"><input type="checkbox" name="members" value="${a.id}" ${g?.members.includes(a.id) ? "checked" : ""}>${avatar(s, a.id)}<span>${e(a.name)}</span></label>`).join("")}</div></div>${field("队长", `<select name="leader">${options([["", "由第一位选中成员担任"], ...s.config.agents.map((a) => [a.id, a.name])], g?.leader || "")}</select>`)}<label class="check-row"><input type="checkbox" name="review" ${(g ? g.review !== false : s.config.permissions?.review !== false) ? "checked" : ""}>成员交付后由我审核</label><details class="advanced"><summary>工作目录与执行设置</summary>${field("工作目录", `<div class="input-action">${input("workspace", g?.workspace || "", 'placeholder="默认使用用户目录下的 workspace"')}${button("pick-folder", "选择", { ic: "folder" })}</div>`)}${field("每轮协作的运行次数上限", input("max_turns", g?.max_turns || 24, 'type="number" min="2" max="100"'), "达到上限后保留待投递消息，由你决定继续。")}</details>`,
+    `${field("名称", input("name", g?.name || "", 'required maxlength="100" placeholder="例如：整车控制策略评审"'))}${g ? "" : field("共同目标", textarea("goal", "", 'rows="3" placeholder="希望共同完成什么？有哪些验收标准？"'))}<div class="field"><span>协作成员</span><div class="member-options">${s.config.agents.map((a) => `<label class="member-option"><input type="checkbox" name="members" value="${a.id}" ${g?.members.includes(a.id) ? "checked" : ""}>${avatar(s, a.id)}<span>${e(a.name)}</span></label>`).join("")}</div></div>${field("队长", `<select name="leader">${options([["", "由第一位选中成员担任"], ...s.config.agents.map((a) => [a.id, a.name])], g?.leader || "")}</select>`)}<label class="check-row"><input type="checkbox" name="review" ${(g ? g.review !== false : s.config.permissions?.review !== false) ? "checked" : ""}>最终交付后由我确认</label><details class="advanced"><summary>工作目录与执行设置</summary>${field("工作目录", `<div class="input-action">${input("workspace", g?.workspace || "", 'placeholder="默认使用用户目录下的 workspace"')}${button("pick-folder", "选择", { ic: "folder" })}</div>`)}${field("每轮协作的运行次数上限", input("max_turns", g?.max_turns || 24, 'type="number" min="2" max="100"'), "达到上限后保留待投递消息，由你决定继续。")}</details>`,
     button("close-dialog", "取消") + submit(g ? "保存" : "创建协作"),
     "group-form",
   );
@@ -105,7 +105,7 @@ export function requestDetail(s, r) {
         }) +
           button(
             "answer-request",
-            r.kind === "tool" ? "允许本次执行" : "通过交付",
+            r.kind === "tool" ? "允许本次执行" : r.kind === "final_review" ? "确认最终交付" : "通过交付",
             { id: r.id, cls: "primary", extra: 'data-choice="allow"' },
           ) +
           (r.kind === "tool"
@@ -115,6 +115,14 @@ export function requestDetail(s, r) {
                 ic: "shield",
               })
             : ""),
+  );
+}
+export function workDetail(work) {
+  const label = work.status === "done" ? "已完成" : work.status === "review" ? "待你确认" : "修订中";
+  return dialog(
+    work.title,
+    `<div class="detail-meta">${badge(label, work.status === "done" ? "good" : "warn")}${work.accepted ? `<span class="subtle">${date(work.accepted)}</span>` : ""}</div><div class="prose result-body">${markdown(work.result)}</div>${work.feedback ? `<div class="detail-section"><h3>修订要求</h3><p>${e(work.feedback)}</p></div>` : ""}${work.status === "done" ? field("需要修订时填写要求", textarea("work_feedback", "", 'rows="3" placeholder="说明需要调整的内容…"')) : ""}`,
+    work.status === "done" ? button("reopen-work", "重新打开交付", { id: work.id }) : "",
   );
 }
 export function memberDetail(s, g, aid) {
@@ -219,7 +227,7 @@ export function permissionsForm(s, agent) {
     `${!agent ? field("默认工具确认策略", `<select name="mode">${options(Object.entries(permissionNames), policy.mode || "ask")}</select>`) : ""}
     <p class="permission-explanation">“自动允许”会放行运行器提交的工具确认请求，“自动拒绝”会拒绝这些请求。原运行器的允许/禁止规则仍生效；这里不限制文件访问范围。</p>
     <div class="permission-members">${members.map((a) => `<label class="permission-member">${avatar(s, a.id)}<span><strong>${e(a.name)}</strong><small>当前：${e(permissionNames[a.permission_effective] || "由我确认")}</small></span><select name="permission:${e(a.id)}" aria-label="${e(a.name)}的工具权限">${options(permissionOptions(a.source_name), a.permission_mode || (a.auto_tools ? "auto" : "inherit"))}</select></label>`).join("")}</div>
-    ${!agent ? `<div class="permission-review"><label class="check-row"><input type="checkbox" name="review" ${policy.review !== false ? "checked" : ""}>新建协作默认由我审核交付</label><p class="field-hint">已有协作在“协作设置”中单独调整。业务提问始终保留给你答复。</p></div>` : ""}
+    ${!agent ? `<div class="permission-review"><label class="check-row"><input type="checkbox" name="review" ${policy.review !== false ? "checked" : ""}>新建协作默认由我确认最终交付</label><p class="field-hint">已有协作在“协作设置”中单独调整。业务提问始终保留给你答复。</p></div>` : ""}
     <p class="field-hint">保存后立即生效，也会处理这些成员正在等待的工具确认。</p>`,
     button("close-dialog", "取消") + submit("保存权限"),
     "permissions-form",

@@ -1,0 +1,27 @@
+test_automatic_result_and_explicit_reply_produce_only_one_wake (test_delivery_workflow.WorkflowTest) ... ok
+test_closed_delivery_cannot_be_retried_through_recovery (test_delivery_workflow.WorkflowTest) ... ok
+test_external_claim_checks_the_same_task_state (test_delivery_workflow.WorkflowTest) ... ok
+test_external_reply_to_old_epoch_cannot_wake_reopened_work (test_delivery_workflow.WorkflowTest) ... ok
+test_external_task_claim_is_once_and_marks_running (test_delivery_workflow.WorkflowTest) ... ok
+test_final_submission_and_acceptance_silence_old_chain_only (test_delivery_workflow.WorkflowTest) ... ok
+test_first_requested_reply_wakes_but_repeated_answers_and_replies_do_not (test_delivery_workflow.WorkflowTest) ... ok
+test_full_revision_cycle_creates_one_new_acceptance_and_no_old_dispatch (test_delivery_workflow.WorkflowTest) ... ok
+test_internal_review_releases_dependencies_without_human_approval (test_delivery_workflow.WorkflowTest) ... ok
+test_legacy_duplicate_reviews_migrate_to_internal_completion_without_approval (test_delivery_workflow.WorkflowTest) ... ok
+test_legacy_human_approved_chain_is_quiet_after_upgrade (test_delivery_workflow.WorkflowTest) ... ok
+test_old_assignment_cannot_reset_review_done_cancelled_or_new_generation (test_delivery_workflow.WorkflowTest) ... ok
+test_one_final_acceptance_and_idempotent_retry (test_delivery_workflow.WorkflowTest) ... ok
+test_peer_cannot_submit_final_or_approve (test_delivery_workflow.WorkflowTest) ... ok
+test_prelaunch_recheck_skips_assignment_completed_after_tick (test_delivery_workflow.WorkflowTest) ... ok
+test_progress_adopts_work_and_retires_unstarted_assignment (test_delivery_workflow.WorkflowTest) ... ok
+test_review_disabled_finishes_without_fabricating_human_approval (test_delivery_workflow.WorkflowTest) ... ok
+test_revise_is_explicit_and_old_messages_stay_quiet (test_delivery_workflow.WorkflowTest) ... ok
+test_stale_callback_cannot_create_work_after_reopen (test_delivery_workflow.WorkflowTest) ... ok
+test_submitted_task_consumes_queued_assignment_before_it_can_rerun (test_delivery_workflow.WorkflowTest) ... ok
+test_task_create_retry_has_one_assignment_and_changed_payload_is_rejected (test_delivery_workflow.WorkflowTest) ... ok
+test_two_agents_review_then_acceptance_creates_no_additional_turns (test_delivery_workflow.WorkflowTest) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.899s
+
+OK

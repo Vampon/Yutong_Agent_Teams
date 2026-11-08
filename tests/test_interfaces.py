@@ -36,6 +36,17 @@ class InterfaceTest(unittest.TestCase):
         _,r=self.request('/mcp',dict(jsonrpc='2.0',id=2,method='tools/list'));self.assertIn('teams_reply',[t['name'] for t in r['result']['tools']])
         _,r=self.request('/mcp',dict(jsonrpc='2.0',id=3,method='tools/call',params={'name':'teams_send','arguments':{'targets':['human'],'text':'MCP'}}))
         self.assertFalse(r['result'].get('isError',False));self.assertEqual('external',self.c.repo.list('message')[-1]['author'])
+    def test_mcp_final_delivery_contract_and_http_acceptance(self):
+        m=self.c.admin_call('message.send',dict(group_id=self.g,text='final delivery fixture'))
+        self.client.read(m['id'])
+        _,r=self.request('/mcp',dict(jsonrpc='2.0',id=4,method='tools/call',params={
+            'name':'teams_submit_final','arguments':{'work_id':m['root_id'],'version':1,'title':'Fixture result','text':'Verified actual fixture result'}}))
+        self.assertFalse(r['result'].get('isError',False))
+        work=r['result']['structuredContent']['result']
+        self.assertEqual('review',work['status'])
+        self.request('/api',{'op':'attention.answer','data':{'id':work['request_id'],'allow':True}},token=self.token)
+        self.assertEqual([],self.client.claim())
+        self.assertEqual('done',self.client.call('context.get')['works'][0]['status'])
     def test_scope_and_origin_rejection(self):
         for path,token,origin in [('/api',self.conn['token'],None),('/agent/v1',self.token,None),('/mcp',self.conn['token'],'https://untrusted.example')]:
             with self.assertRaises(urllib.error.HTTPError) as caught:self.request(path,{'op':'state'},token,origin)

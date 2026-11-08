@@ -249,6 +249,19 @@ const actions = {
     editing = { task: current().tasks.find((t) => t.id === id) };
     open(D.taskDetail(state, current(), editing.task), true);
   },
+  work: (id) => {
+    const work = current().works.find((w) => w.id === id);
+    const request = state.requests.find((r) => r.id === work.request_id && r.status === "pending");
+    editing = { work, request };
+    open(request ? D.requestDetail(state, request) : D.workDetail(work), true);
+  },
+  "reopen-work": async (id) => {
+    await api("work.reopen", {
+      group_id: groupId, id, version: editing.work.version,
+      text: modal.querySelector("[name=work_feedback]")?.value || "",
+    });
+    close();
+  },
   "task-action": async (id, el) => {
     await api("task.action", {
       group_id: groupId,

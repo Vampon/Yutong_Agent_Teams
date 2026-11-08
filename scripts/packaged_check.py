@@ -52,7 +52,7 @@ def main():
         pipe.send({'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-03-26'}})
         initialized=pipe.next(threading.Event(),time.monotonic()+30)
         check('windowed-exe-mcp-stdio',initialized.get('result',{}).get('serverInfo',{}).get('name')=='yutong-teams')
-        pipe.send({'jsonrpc':'2.0','id':2,'method':'tools/call','params':{'name':'teams_send','arguments':{'targets':['echo'],'text':'Read-only packaged process check'}}})
+        pipe.send({'jsonrpc':'2.0','id':2,'method':'tools/call','params':{'name':'teams_send','arguments':{'targets':['echo'],'text':'Read-only packaged process check','mode':'request_reply'}}})
         response=pipe.next(threading.Event(),time.monotonic()+15);check('windowed-mcp-tool-call',response.get('result',{}).get('isError') is False)
         message=response['result']['structuredContent']['result']
         def reply_to(mid,timeout=190):
@@ -64,11 +64,17 @@ def main():
                 time.sleep(.25)
             raise TimeoutError('No correlated reply within deadline')
         check('bundled-python-launches-external-command',reply_to(message['id'],30)['text']=='PACKAGED_COMMAND_OK')
+        work=next(w for w in client.call('context.get')['works'] if w['id']==message['root_id'])
+        final=client.submit_final(work['id'],work['version'],'Packaged workflow result','Actual command returned PACKAGED_COMMAND_OK')
+        repeated=client.submit_final(work['id'],work['version'],'Packaged workflow result','Actual command returned PACKAGED_COMMAND_OK')
+        check('frozen-final-delivery-single-acceptance',final['status']=='review' and final['request_id']==repeated['request_id'])
+        check('frozen-final-review-remains-human-owned',client.call('human.status',id=final['request_id'])['status']=='pending')
+        check('frozen-closed-chain-not-claimed',client.claim()==[])
         if args.live:
             word='PACKAGED_MEMORY_'+uuid.uuid4().hex[:8]
-            m=client.send(['claude'],'记住单词 '+word+'。不读写文件或使用其他工具。通过协作工具确认本消息已读并回复 READY。')
+            m=client.send(['claude'],'记住单词 '+word+'。不读写文件或使用其他工具。通过协作工具确认本消息已读并回复 READY。',mode='request_reply')
             first=reply_to(m['id']);check('frozen-claude-live-mcp-reply','READY' in first['text'])
-            m=client.send(['claude'],'仅根据你当前原生会话记忆，回复上一轮记住的单词。通过协作工具确认本消息已读并回复，不读文件或群历史。')
+            m=client.send(['claude'],'仅根据你当前原生会话记忆，回复上一轮记住的单词。通过协作工具确认本消息已读并回复，不读文件或群历史。',mode='request_reply')
             second=reply_to(m['id']);check('frozen-claude-session-memory',word in second['text'])
         report['ok']=all(x['ok'] for x in report['checks'])
     finally:

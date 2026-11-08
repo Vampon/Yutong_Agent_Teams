@@ -11,6 +11,7 @@ import threading
 import time
 from ..core.access import actor_key
 from ..core.contracts import HUMAN, Principal, Conflict, now, uid
+from ..core.lifecycle import eligible
 from .processes import Cancelled
 from .prompting import render
 from .progress import apply as apply_progress
@@ -72,6 +73,9 @@ class Supervisor:
             for task in self.repo.list("task", group["id"]):
                 if task["status"] != "todo" or not task["auto_run"] or task.get("message_id"):
                     continue
+                work = self.repo.get("work", task["root_id"])
+                if work and (work["status"] != "active" or task.get("work_epoch", 1) != work["epoch"]):
+                    continue
                 if any(self.repo.require("task", key)["status"] != "done" for key in task["depends_on"]):
                     continue
                 text = "任务分配：%s\n%s\n补充要求：%s" % (task["title"], task["description"], task["feedback"])
@@ -81,7 +85,8 @@ class Supervisor:
                     creator = group["leader"]
                 author = HUMAN if creator == "human" else Principal(actor_id=creator, group_id=group["id"])
                 message = self.control.messages.send(author, group["id"], dict(targets=[task["agent_id"]], text=text,
-                    mode="request_reply", task_id=task["id"], client_id="task-dispatch:" + task["id"] + ":" + str(task["version"])), origin="task_assignment", root_id=task.get("root_id"))
+                    mode="request_reply", task_id=task["id"], dispatch_epoch=task.get("dispatch_epoch", 1),
+                    client_id="task-dispatch:" + task["id"] + ":" + str(task.get("dispatch_epoch", 1))), origin="task_assignment", root_id=task.get("root_id"))
                 task.update(message_id=message["id"], status="queued", version=task["version"] + 1)
                 self.repo.put("task", task)
                 self.repo.emit(group["id"], "task.dispatched", "system", {"task_id": task["id"], "message_id": message["id"]})
@@ -97,7 +102,7 @@ class Supervisor:
             for delivery in self.repo.list("delivery"):
                 if len(active) >= int(self.control.config.data.get("parallel", 3)):
                     break
-                if delivery["state"] != "queued" or delivery["mode"] == "mail" or delivery["recipient"] == "human":
+                if delivery["recipient"] == "human" or not eligible(self.repo, delivery):
                     continue
                 gid, aid = delivery["group_id"], delivery["recipient"]
                 group = self.repo.require("group", gid)
@@ -119,6 +124,7 @@ class Supervisor:
                 agent = self.control.config.agent(aid)
                 run = dict(id=uid(), group_id=gid, actor_id=aid, delivery_id=delivery["id"], message_id=message["id"],
                            root_id=message["root_id"], task_id=message.get("task_id", ""), status="starting",
+                           work_epoch=message.get("work_epoch", 1),
                            generation=session["generation"], workspace=agent.get("cwd") or group["workspace"],
                            result="", error="", events=[], trace=[], preview="", created=now())
                 delivery.update(state="offered", attempt=delivery["attempt"] + 1, lease_until=0, budget_wait=False)
@@ -126,7 +132,7 @@ class Supervisor:
                 self.repo.put("run", run)
                 session.update(state="starting", error="")
                 self.repo.put("session", session)
-                if run["task_id"]:
+                if run["task_id"] and message.get("origin") == "task_assignment":
                     task = self.repo.require("task", run["task_id"])
                     task.update(status="running", version=task["version"] + 1)
                     self.repo.put("task", task)
@@ -230,7 +236,7 @@ class Supervisor:
                     self.repo.emit(gid, "tool.permission", "system", dict(actor_id=aid, run_id=run["id"], tool=name, policy=mode, allow=allowed))
                 return allowed
             request = self.control.attention.create(p, gid, "tool", "确认工具执行：" + str(name)[:150],
-                run_id=run["id"], tool=name, arguments=safe)
+                run_id=run["id"], root_id=run["root_id"], tool=name, arguments=safe)
             emit("tool", dict(name=name, arguments=safe, status="awaiting_approval"))
             persist(state="waiting")
             with self.repo.transaction():
@@ -258,6 +264,22 @@ class Supervisor:
                     current = self.repo.require("run", run["id"]); current["status"] = "running"; self.repo.put("run", current)
                 persist(state="busy")
         try:
+            with self.repo.transaction():
+                work = self.repo.get("work", run["root_id"])
+                task = self.repo.get("task", run.get("task_id", ""))
+                obsolete = work and (work["status"] != "active" or work["epoch"] != run.get("work_epoch", 1))
+                if task and self.repo.require("message", run["message_id"]).get("origin") == "task_assignment":
+                    obsolete = obsolete or task["status"] != "running" or task.get("message_id") != run["message_id"]
+                if obsolete:
+                    current = self.repo.require("run", run["id"])
+                    current.update(status="completed", result="任务状态已更新，跳过过期投递。", finished=now(), skipped=True)
+                    self.repo.put("run", current)
+                    session = self.repo.require("session", key)
+                    if session["generation"] == run["generation"]:
+                        session.update(state="ready", error="")
+                        self.repo.put("session", session)
+                    self.repo.emit(gid, "run.superseded", aid, {"run_id": run["id"]})
+                    return
             driver = self._driver(run, agent, initial_session, p, persist)
             result = driver.run(render(self.control, run), run, stop, emit, approve)
             if stop.is_set():
@@ -271,7 +293,7 @@ class Supervisor:
                     if not result.strip():
                         raise ValueError("适配器没有返回有效正文")
                     self.control.messages.send(p, gid, dict(reply_to=run["message_id"], text=result), origin="adapter_response")
-                    if run["task_id"]:
+                    if run["task_id"] and self.repo.require("task", run["task_id"])["status"] == "running":
                         task = self.repo.require("task", run["task_id"])
                         self.control.tasks.update(p, gid, task["id"], dict(version=task["version"], action="submit", text=result))
                 current = self.repo.require("run", run["id"])

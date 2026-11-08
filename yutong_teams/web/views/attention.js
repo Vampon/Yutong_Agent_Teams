@@ -13,7 +13,7 @@ export function attention(s, groupId = "") {
   const pending = s.requests.filter(
     (r) => r.status === "pending" && (!groupId || r.group_id === groupId),
   );
-  return `<div class="page-panel attention-page"><div class="panel-toolbar"><div><h2>待我处理</h2><p>成员的提问、工具执行确认和交付审核集中在这里。</p></div><span class="count-label">${pending.length} 项</span></div>${pending.length ? `<div class="attention-cards">${pending.map((r) => `<button class="attention-card" data-action="request" data-id="${r.id}"><div class="attention-card-top"><span class="request-kind kind-${r.kind}">${icon(r.kind === "review" ? "check" : r.kind === "tool" ? "shield" : "chat")}${r.kind === "review" ? "交付审核" : r.kind === "tool" ? "工具确认" : "问题答复"}</span><time>${date(r.created)}</time></div><h3>${e(r.title)}</h3><p>${e(r.detail?.slice(0, 160) || r.tool || "")}</p><footer>${avatar(s, r.actor_id, "tiny")}<span>${e(name(s, r.actor_id))}</span><span class="subtle">${e(s.groups.find((g) => g.id === r.group_id)?.name || "")}</span>${icon("arrow")}</footer></button>`).join("")}</div>` : empty("暂时没有待处理事项", "成员需要你的判断时，这里会及时提醒。", "check")}</div>`;
+  return `<div class="page-panel attention-page"><div class="panel-toolbar"><div><h2>待我处理</h2><p>成员的提问、工具执行确认和最终交付确认集中在这里。</p></div><span class="count-label">${pending.length} 项</span></div>${pending.length ? `<div class="attention-cards">${pending.map((r) => `<button class="attention-card" data-action="request" data-id="${r.id}"><div class="attention-card-top"><span class="request-kind kind-${r.kind}">${icon(["review", "final_review"].includes(r.kind) ? "check" : r.kind === "tool" ? "shield" : "chat")}${["review", "final_review"].includes(r.kind) ? "最终交付确认" : r.kind === "tool" ? "工具确认" : "问题答复"}</span><time>${date(r.created)}</time></div><h3>${e(r.title)}</h3><p>${e(r.detail?.slice(0, 160) || r.tool || "")}</p><footer>${avatar(s, r.actor_id, "tiny")}<span>${e(name(s, r.actor_id))}</span><span class="subtle">${e(s.groups.find((g) => g.id === r.group_id)?.name || "")}</span>${icon("arrow")}</footer></button>`).join("")}</div>` : empty("暂时没有待处理事项", "成员需要你的判断时，这里会及时提醒。", "check")}</div>`;
 }
 export function sidePanel(s, g) {
   const pending = s.requests.filter(
@@ -26,7 +26,7 @@ export function sidePanel(s, g) {
           .slice(0, 4)
           .map(
             (r) =>
-              `<button class="attention-mini" data-action="request" data-id="${r.id}"><span class="attention-mini-icon">${icon(r.kind === "tool" ? "shield" : r.kind === "review" ? "check" : "chat")}</span><span><strong>${e(r.title)}</strong><small>${e(name(s, r.actor_id))}</small></span>${icon("chevron")}</button>`,
+              `<button class="attention-mini" data-action="request" data-id="${r.id}"><span class="attention-mini-icon">${icon(r.kind === "tool" ? "shield" : ["review", "final_review"].includes(r.kind) ? "check" : "chat")}</span><span><strong>${e(r.title)}</strong><small>${e(name(s, r.actor_id))}</small></span>${icon("chevron")}</button>`,
           )
           .join(
             "",
@@ -47,15 +47,5 @@ export function sidePanel(s, g) {
      "",
    )}</div>${button("connections", "连接外部成员", { ic: "link", cls: "wide quiet" })}</section>
  ${g.context.brief ? `<section class="side-section side-brief"><div class="section-heading"><h3>共同目标</h3>${button("tab", "查看", { id: "context", cls: "quiet small" })}</div><p>${e(g.context.brief.slice(0, 300))}</p></section>` : ""}
- ${
-   g.tasks.some((t) => t.status === "review")
-     ? `<section class="side-section"><h3>等待审核的交付</h3>${g.tasks
-         .filter((t) => t.status === "review")
-         .map(
-           (t) =>
-             `<button class="side-delivery" data-action="task" data-id="${t.id}">${icon("check")}<span>${e(t.title)}</span>${icon("chevron")}</button>`,
-         )
-         .join("")}</section>`
-     : ""
- }</aside>`;
+ ${(g.works || []).some((w) => w.result) ? `<section class="side-section"><h3>最终交付</h3>${g.works.filter((w) => w.result).slice(-3).reverse().map((w) => `<button class="side-delivery" data-action="work" data-id="${w.id}">${icon(w.status === "done" ? "check" : "clock")}<span>${e(w.title)}<small class="subtle">${w.status === "done" ? "已完成" : w.status === "review" ? "待你确认" : "修订中"}</small></span>${icon("chevron")}</button>`).join("")}</section>` : ""}</aside>`;
 }

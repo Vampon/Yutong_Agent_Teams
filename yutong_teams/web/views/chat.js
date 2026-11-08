@@ -35,6 +35,10 @@ export function chat(s, g, draft = {}) {
 function message(s, g, m) {
   const ds = g.deliveries.filter((d) => d.message_id === m.id);
   const original = g.messages.find((x) => x.id === m.reply_to);
+  if (m.origin === "final_delivery" || m.origin === "final_acceptance") {
+    const work = (g.works || []).find((w) => w.id === m.root_id);
+    if (work) return `<article class="delegation final-delivery" id="message-${m.id}"><div class="final-delivery-line">${icon("check")}<span><strong>${e(work.title)}</strong><small>${work.status === "done" ? "最终交付已完成" : work.status === "review" ? "内部工作已完成，等待你确认最终交付" : "正在按意见修订"}</small></span>${button("work", work.status === "review" ? "查看并确认" : "查看交付", { id: work.id, cls: "small quiet" })}</div></article>`;
+  }
   if (m.origin === "task_assignment") {
     const task = g.tasks.find((t) => t.id === m.task_id);
     return `<article class="delegation" id="message-${m.id}"><details data-disclosure-key="message:${m.id}"><summary>${icon("users")}<span><strong>${e(name(s, m.author))}</strong> 分配任务给 ${m.targets.map((t) => e(name(s, t))).join("、")}<b>${e(task?.title || m.text.split("\n")[0])}</b></span><time>${time(m.time, true)}</time>${icon("chevron")}</summary><div class="delegation-body prose">${markdown(m.text)}${task ? button("task", "查看任务", { id: task.id, cls: "small" }) : ""}</div></details></article>`;

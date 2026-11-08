@@ -1,0 +1,16 @@
+{
+  "source_open_mode": "read-only",
+  "isolated_copy": ".test-data\\workflow-upgrade-d3e2ebb9",
+  "works": [
+    {
+      "id": "f65ce86df61e4306bde87aeee39e3228",
+      "status": "done",
+      "accepted_evidence": "legacy_task_approvals"
+    }
+  ],
+  "pending_reviews": 0,
+  "tasks": 2,
+  "no_new_runs": true,
+  "source_revision_unchanged": true,
+  "ok": true
+}

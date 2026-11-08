@@ -2,6 +2,18 @@
 
 日期：2026-11-06。以下区分真实运行器、协议/模型夹具和界面样本。测试使用项目 `.test-data/` 下独立用户目录，未把样本数据写入日常用户目录。
 
+## 0.4.0：重复派发、结案唤醒与统一验收（2026-11-08）
+
+- 对照本地 CCCC 0.4.48 的 tracked-send、任务版本与 Mail 语义实现。最终交付 work 状态机是本项目新增的简化业务层，架构对应与边界见 `ARCHITECTURE.md`。
+- 84 项单元、适配器及接口测试通过（`evidence/v040-unit.txt`）。最终补充根请求的真实交付回复关联后，22 项相关回归再次通过（`evidence/v040-workflow-unit.txt`）：过期分配不得回退 review/done/cancelled；任务开始前再检查；外部领取一次；当前运行接管排队任务；内部提交释放依赖；重复结果仅唤醒一次；最终提交幂等；审批权限；修订轮次隔离；旧数据升级。
+- 两个**真实 Claude Code 原生会话**完成协作（`evidence/v040-live-claude.json`）：队长分配、评审成员执行、队长汇总，共 3 次执行；内部任务 1 项；最终验收请求 1 项。测试在隔离数据中模拟人类确认，之后观察 20 秒没有新增执行，无遗留审批。不是用模型夹具代替真实协作证据。
+- Claude + DeepSeek 真实联调中，DeepSeek 模型调用返回 `Internal error: turn failed: Request timed out.`（`evidence/v040-live-deepseek.json`）。本次未证明该网络环境下 DeepSeek 能完成模型响应；没有更改用户 VPN、提供方、凭据或原 Harness 设置。协议与协调层回归通过不能替代该模型可用性验证。
+- 用 SQLite 只读连接备份用户最近的真实协作库，在独立副本运行升级（`evidence/v040-real-data-upgrade.json`）：两项历史批准任务保持完成，任务链按已有批准事实关闭，待审项为 0，没有新增运行，源库事件版本不变。新程序首次启动才会迁移用户的实际历史。
+- UI：原有 11 项 smoke 与 4 项最终交付流程检查通过，无页面 JS 错误（`evidence/v040-ui-smoke.json`、`evidence/v040-ui-workflow.json`）。验证内部评审无审批卡、一次确认关闭、刷新状态保留、显式重新打开只产生一条修订消息，以及 1024px 布局。截图均来自明确的界面夹具。
+- 最终单文件 EXE 的 10 项检查通过（`evidence/v040-packaged.json`）：资源自检、真实 WebView2 窗口、成员 HTTP、分身恢复、windowed MCP stdio/工具、外部命令、最终提交幂等、验收仍由人类处理，以及关闭链不被外部领取。测试清除了 Python/Node 的 PATH；外部命令运行器仍使用测试指定的现有 Python 安装。
+
+发布文件：`dist/0.4.0/Yutong Agent Teams.exe`，17,706,417 字节，Windows 文件版本 `0.4.0.0`，SHA256 `f6397672270e7ecdfbd160cb75fc0bde29b89ea95131205d450c07257e2641f7`。原版本保留。工具权限与业务提问仍按原策略处理；统一最终验收只替换内部子任务的逐项人工审核。已进入模型的当前轮次可正常结束，旧任务链不能再派发新的轮次。
+
 ## 0.3.2 Harness 模型配置与 ACP 恢复（2026-11-07）
 
 - 只读核对本机 Harness `0.2.0-rc.2`：`profiles/web/cordis.patch.yml` 配置了 `huoshan`，默认模型是 `deepseek-v4-1-flash-260910`，凭据通过 `HUOSHAN_API_KEY` 引用；`profiles/acp/cordis.patch.yml` 没有模型覆盖。ACP 官方 bundle 默认 `deepseek-official / deepseek-v4-flash`，这才是原先“缺少 DEEPSEEK_API_KEY”的直接原因。不是把截图中的已保存火山凭据判定为无效。

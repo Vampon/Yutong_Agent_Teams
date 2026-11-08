@@ -1,5 +1,6 @@
 """Durable assignments, dependency validation, ownership and human review."""
 from .contracts import Conflict, Forbidden, now, uid, require_text
+from .lifecycle import ensure_work, current_work, require_open, retire_task_deliveries
 
 
 def validate_graph(tasks):
@@ -41,12 +42,23 @@ class Tasks:
                 tasks = self.repo.list("task", gid)
                 if len(tasks) >= 500:
                     raise ValueError("每个协作最多 500 项任务")
-                active = [r for r in self.repo.list("run", gid) if r["actor_id"] == p.actor_id and r["status"] in ("starting", "running", "waiting")]
-                task = dict(id=uid(), group_id=gid, root_id=active[-1]["root_id"] if active else uid(), title=require_text(values.get("title"), "任务名称", 200),
+                root, epoch = current_work(self.repo, p, gid, values.get("work_id", ""))
+                if not root and deps:
+                    root = self.repo.require("task", deps[0])["root_id"]
+                if not root and not p.admin:
+                    candidates = [w for w in self.repo.list("work", gid) if w["status"] == "active"]
+                    if len(candidates) > 1:
+                        raise ValueError("存在多条任务链，请指定 work_id")
+                    root = candidates[0]["id"] if candidates else ""
+                root = root or uid()
+                work = ensure_work(self.repo, gid, root, values.get("title", ""))
+                require_open(self.repo, root, epoch)
+                task = dict(id=uid(), group_id=gid, root_id=root, title=require_text(values.get("title"), "任务名称", 200),
                             description=str(values.get("description", ""))[:32000], agent_id=owner,
                             depends_on=values["depends_on"], status="todo", result="", feedback="", error="",
                             auto_run=bool(values.get("auto_run", not p.admin)), version=1,
-                            created=now(), created_by=p.actor_id, message_id="")
+                            created=now(), created_by=p.actor_id, message_id="", dispatch_epoch=1,
+                            workflow_version=2, work_epoch=work["epoch"])
                 validate_graph(tasks + [task])
                 self.repo.put("task", task)
                 self.repo.emit(gid, "task.created", p.actor_id, task)
@@ -62,6 +74,9 @@ class Tasks:
             if values.get("version") != task["version"]:
                 raise Conflict("任务已更新，请刷新后重试")
             action = values.get("action")
+            if action in ("start", "progress", "block", "submit", "assign", "retry", "revise", "cancel"):
+                _, epoch = current_work(self.repo, p, gid, task["root_id"])
+                require_open(self.repo, task["root_id"], epoch)
             if action in ("retry", "revise", "start", "assign") and any(r.get("task_id") == tid and r["status"] in ("starting", "running", "waiting") for r in self.repo.list("run", gid)):
                 raise Conflict("当前任务的运行器尚未退出，请先停止该成员")
             manager = p.admin or group["leader"] == p.actor_id
@@ -76,6 +91,7 @@ class Tasks:
                 if task["status"] not in ("todo", "blocked"):
                     raise Conflict("当前任务不可启动")
                 task.update(auto_run=True, status="todo", error="", message_id="")
+                task["dispatch_epoch"] = task.get("dispatch_epoch", 1) + 1
             elif action == "progress":
                 if task["status"] in ("review", "done", "cancelled"):
                     raise Conflict("当前任务不能继续执行")
@@ -92,19 +108,21 @@ class Tasks:
                 if any(self.repo.require("task", d)["status"] != "done" for d in task["depends_on"]):
                     raise Conflict("前置任务尚未完成")
                 task.update(result=require_text(values.get("text"), "交付结果", 100000), error="",
-                            status="review" if group["review"] else "done")
-                if group["review"]:
-                    self.attention.create(p, gid, "review", "审核交付：" + task["title"], task["result"], task_id=tid)
+                            status="done", completed_by=p.actor_id, completed=now())
             elif action == "approve":
                 if task["status"] != "review":
                     raise Conflict("任务不在待审核状态")
                 task["status"] = "done"
                 task["approved_by"] = "human"
             elif action in ("revise", "retry"):
-                if task["status"] not in ("review", "failed", "interrupted", "blocked", "cancelled"):
+                if task["status"] not in ("review", "failed", "interrupted", "blocked", "cancelled", "done"):
                     raise Conflict("请先停止当前任务，再重试")
                 task.update(status="todo", feedback=str(values.get("text", ""))[:10000], auto_run=True,
-                            message_id="", error="")
+                            message_id="", error="", notified=False, approved_by="",
+                            dispatch_epoch=task.get("dispatch_epoch", 1) + 1)
+                work = self.repo.get("work", task["root_id"])
+                if work:
+                    task["work_epoch"] = work["epoch"]
             elif action == "cancel":
                 task["status"] = "cancelled"
             elif action == "assign":
@@ -117,13 +135,8 @@ class Tasks:
             else:
                 raise ValueError("未知任务操作")
             task["version"] += 1
-            if action in ("retry", "revise", "start", "cancel"):
-                for delivery in self.repo.list("delivery", gid):
-                    message = self.repo.require("message", delivery["message_id"])
-                    if message.get("task_id") == tid and delivery["state"] in ("queued", "offered", "uncertain", "failed"):
-                        delivery.update(state="dismissed", lease_until=0)
-                        self.repo.put("delivery", delivery)
-                        self.repo.emit(gid, "message.task_superseded", p.actor_id, {"delivery_id": delivery["id"], "action": action})
+            if action in ("retry", "revise", "start", "cancel", "submit", "approve", "progress", "block"):
+                retire_task_deliveries(self.repo, task, action)
             self.repo.put("task", task)
             self.repo.emit(gid, "task." + action, p.actor_id, {"task_id": tid, "version": task["version"], "status": task["status"]})
             if action in ("approve", "revise", "cancel"):

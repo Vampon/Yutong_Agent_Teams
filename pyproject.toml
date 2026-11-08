@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "yutong-agent-teams"
-version = "0.3.2"
+version = "0.4.0"
 description = "Desktop collaboration control plane for independently operated agents"
 requires-python = ">=3.8"
 dependencies = ["pywebview==5.4", "httpx==0.28.1", "PyYAML==6.0.2"]

@@ -865,3 +865,7 @@
 .gateway-section .check-row {
   margin-bottom: 20px;
 }
+
+.final-delivery-line { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.final-delivery-line > span { flex: 1; min-width: 0; }
+.final-delivery-line small, .side-delivery small { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; }

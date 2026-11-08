@@ -1,0 +1,10 @@
+{"check": "--self-test", "ok": true, "detail": {"ok": true, "version": "0.4.0", "home": "D:\\Project\\Yutong Agent Teams\\.test-data\\v2-packaged-372f73bc", "agents": 5, "model_config_parser": true}}
+{"check": "--smoke-gui", "ok": true, "detail": {"ok": true, "title": "Yutong Agent Teams", "backend": "edgechromium", "logo_loaded": true, "agent_icons_loaded": true}}
+{"check": "scoped-http-connect", "ok": true}
+{"check": "frozen-shared-runtime-personas-restored", "ok": true}
+{"check": "windowed-exe-mcp-stdio", "ok": true}
+{"check": "windowed-mcp-tool-call", "ok": true}
+{"check": "bundled-python-launches-external-command", "ok": true}
+{"check": "frozen-final-delivery-single-acceptance", "ok": true}
+{"check": "frozen-final-review-remains-human-owned", "ok": true}
+{"check": "frozen-closed-chain-not-claimed", "ok": true}

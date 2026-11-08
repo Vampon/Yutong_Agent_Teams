@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "checks": [
+    "internal review completes without a human approval card",
+    "one final confirmation closes the chain without starting a run",
+    "explicit reopening creates exactly one revision message",
+    "final delivery state persists on refresh and fits 1024px"
+  ],
+  "errors": []
+}

@@ -17,6 +17,8 @@ from .core.sessions import Sessions
 from .core.tasks import Tasks
 from .core.profiles import Profiles
 from .core.permissions import Permissions
+from .core.workflow import Workflow
+from .core.lifecycle import current_work, require_open
 
 
 class Coordinator:
@@ -32,6 +34,7 @@ class Coordinator:
         self.messages = Messaging(self.repo, self.access)
         self.attention = Attention(self.repo, self.access)
         self.tasks = Tasks(self.repo, self.access, self.attention)
+        self.workflow = Workflow(self.repo, self.access, self.attention, self.messages)
         self.sessions = Sessions(self.repo, self.access)
         self.registry = registry or default_registry()
         self.profiles = Profiles(config, self.registry)
@@ -42,6 +45,9 @@ class Coordinator:
         self.gateway = Gateway(self)
         self.supervisor = Supervisor(self)
         self.supervisor.recover_interrupted()
+        from .core.workflow_migration import upgrade
+        for task in upgrade(self.repo):
+            self._notify_completed(task)
         if start:
             self.supervisor.start()
 
@@ -64,6 +70,7 @@ class Coordinator:
                 group["context"] = self.repo.require("context", gid)
                 group["goal"] = group["context"]["brief"]
                 group["tasks"] = self.repo.list("task", gid)
+                group["works"] = self.repo.list("work", gid)
                 group["deliveries"] = self.repo.list("delivery", gid)
                 messages = self.repo.ordered("message", gid)
                 pending = {d["message_id"] for d in group["deliveries"] if d["state"] not in ("dismissed", "cancelled")
@@ -97,6 +104,9 @@ class Coordinator:
                                    role=self.config.agent(a["actor_id"]).get("role", ""))
                              for a in self.repo.list("actor", gid) if a["enabled"]]
             ctx["leader"] = self.repo.require("group", gid)["leader"]
+            root, _ = current_work(self.repo, p, gid)
+            ctx["current_work"] = self.repo.get("work", root) if root else None
+            ctx["works"] = self.repo.list("work", gid)
             return ctx
         if op == "context.update":
             return self.groups.update_context(p, gid, data)
@@ -126,11 +136,16 @@ class Coordinator:
             task = self.tasks.update(p, gid, data["id"], data)
             self._notify_completed(task)
             return task
+        if op == "work.submit":
+            return self.workflow.submit(p, gid, data)
         if op == "human.request":
             options = data.get("options", [])
             if not isinstance(options, list) or not all(isinstance(x, str) for x in options) or len(options) > 8:
                 raise ValueError("选项应为至多 8 项文本")
-            return self.attention.create(p, gid, "question", data["title"], data.get("detail", ""), options=options)
+            root, epoch = current_work(self.repo, p, gid, data.get("work_id", ""))
+            if root:
+                require_open(self.repo, root, epoch)
+            return self.attention.create(p, gid, "question", data["title"], data.get("detail", ""), options=options, root_id=root)
         if op == "human.status":
             item = self.repo.require("request", data["id"])
             if item["group_id"] != gid or item["actor_id"] != p.actor_id:
@@ -180,9 +195,20 @@ class Coordinator:
             return task
         if op == "context.update":
             return self.groups.update_context(HUMAN, data["group_id"], data)
+        if op == "work.reopen":
+            work = self.workflow.reopen(data["group_id"], data["id"], data["version"], data.get("text", ""))
+            self.supervisor.enable(work["group_id"], self.repo.require("group", work["group_id"])["leader"])
+            return work
         if op == "attention.answer":
             request = self.repo.require("request", data["id"])
+            if request["kind"] == "final_review":
+                work = self.workflow.answer(request["id"], data.get("allow") is True, data.get("text", ""))
+                if work["status"] == "active":
+                    self.supervisor.enable(work["group_id"], self.repo.require("group", work["group_id"])["leader"])
+                return work
             if request["kind"] == "review":
+                if request["status"] != "pending":
+                    raise Conflict("此审核已处理或已迁移为内部任务，请刷新")
                 task = self.repo.require("task", request["task_id"])
                 task = self.tasks.update(HUMAN, request["group_id"], task["id"],
                                          dict(version=task["version"], action="approve" if data.get("allow") else "revise", text=data.get("text", "")))
@@ -199,7 +225,7 @@ class Coordinator:
             with self.repo.transaction():
                 self.attention.resolve(HUMAN, request["id"], response)
                 if request["kind"] == "question":
-                    self.messages.send(HUMAN, request["group_id"], dict(text="关于「%s」的答复：\n%s" % (request["title"], response["text"]), targets=[request["actor_id"]]), origin="human_answer")
+                    self.messages.send(HUMAN, request["group_id"], dict(text="关于「%s」的答复：\n%s" % (request["title"], response["text"]), targets=[request["actor_id"]]), origin="human_answer", root_id=request.get("root_id") or None)
             return True
         if op == "agent.clone":
             result = self.profiles.create(data)
@@ -266,10 +292,18 @@ class Coordinator:
             task["notified"] = True
             self.repo.put("task", task)
             group = self.repo.require("group", task["group_id"])
-            if task["agent_id"] != group["leader"]:
-                author = HUMAN if task.get("approved_by") == "human" else Principal(actor_id=task["agent_id"], group_id=group["id"])
-                self.messages.send(author, group["id"], dict(targets=[group["leader"]], mode="send",
-                    text="已确认交付：%s\n%s" % (task["title"], task["result"][:32000])), origin="task_review", root_id=task.get("root_id"))
+            original = self.repo.get("message", task.get("message_id", ""))
+            targets = [original["author"]] if original and original["author"] != task["agent_id"] else []
+            if group["leader"] != task["agent_id"] and group["leader"] not in targets:
+                targets.append(group["leader"])
+            if targets:
+                author = Principal(actor_id=task["agent_id"], group_id=group["id"])
+                values = dict(targets=targets, mode="send",
+                    text="内部任务已完成：%s\n%s\n请队长汇总内部评审后提交最终交付。" % (task["title"], task["result"][:32000]),
+                    client_id="task-result:" + task["id"] + ":" + str(task.get("dispatch_epoch", 1)))
+                if original and original["author"] in targets:
+                    values["reply_to"] = original["id"]
+                self.messages.send(author, group["id"], values, origin="task_result", root_id=task.get("root_id"))
 
     def connection(self, gid, aid, rotate=False):
         with self.connection_lock:

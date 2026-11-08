@@ -108,7 +108,7 @@ class RuntimeTest(unittest.TestCase):
         with self.c.repo.transaction():
             g=self.c.repo.require('group',self.g);g['max_turns']=2;self.c.repo.put('group',g)
         def behavior(a,p,t,stop,emit,approve):
-            a.binding['invoke']('message.send',dict(targets=['two' if a.aid=='one' else 'one'],text='followup'))
+            a.binding['invoke']('message.send',dict(targets=['two' if a.aid=='one' else 'one'],text='followup',mode='send'))
             return 'sent'
         MemoryAdapter.behavior=behavior
         self.send();self.wait(lambda:len(self.c.repo.list('run'))==2 and all(r['status']=='completed' for r in self.c.repo.list('run')))

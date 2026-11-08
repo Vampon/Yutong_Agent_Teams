@@ -1,0 +1,10 @@
+{
+  "version": "0.4.0",
+  "exe": "D:\\Project\\Yutong Agent Teams\\dist\\0.4.0\\Yutong Agent Teams.exe",
+  "bytes": 17706417,
+  "file_version": "0.4.0.0",
+  "sha256": "f6397672270e7ecdfbd160cb75fc0bde29b89ea95131205d450c07257e2641f7",
+  "unit_tests": 84,
+  "workflow_regressions": 22,
+  "packaged_checks": 10
+}

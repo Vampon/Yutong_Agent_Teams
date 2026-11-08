@@ -68,11 +68,12 @@ try:
         client.delivered(mid)  # 已由本系统接收
         client.read(mid)       # 实际开始处理前确认已读
         result = existing_agent.run(message["text"])
-        client.reply(mid, result, client_id="reply-" + mid)
         if message.get("task_id"):
             task = next(t for t in client.call("task.list") if t["id"] == message["task_id"])
             client.call("task.update", id=task["id"], version=task["version"],
-                        action="submit", text=result)
+                        action="submit", text=result)  # 系统自动向请求者回报一次
+        else:
+            client.reply(mid, result, client_id="reply-" + mid)
 finally:
     shutdown.set()
 ```
@@ -80,6 +81,16 @@ finally:
 业务异常不要假装成功；可通过 `actor.status` 报告 `blocked`，或给原消息发送真实失败原因。外部 Agent 应在自己的系统持久记录已执行的消息 ID/结果，恢复时先核对；本 SDK 不会自动重试可能已成功的 POST。`claim` 的 60 秒窗口用于**确认接收**，无需在 60 秒内完成长任务；接收后先 `delivered`，再执行。
 
 同一成员身份只能代表同一个执行主体。如果多台机器希望同时参与，为每个执行主体建立独立成员。会话 ID 由外部系统持有，工作台不伪造其会话恢复能力。
+
+## 内部评审与最终验收（0.4.0）
+
+- `task.create` / `teams_task_create` 已包含自动派发，不要再发送一条相同工作请求。重试同一操作时复用 `client_id`；新工作使用新标识。外部系统应将收到消息的 `root_id` 作为后续创建任务、发送新请求的 `work_id`，防止并行任务串线。
+- `task.update(action=submit)` 完成内部任务并自动回报一次，**不请求人类审批**。评审结论不通过时，由队长在当前任务链里安排修订，或用 `retry` 明确重开内部任务。任务版本冲突后必须重新读取。
+- 队长通过 `context.get` 读取 `current_work`（受管理运行器）或 `works`（外部运行器），完成当前链全部内部任务后调用 `work.submit` / `teams_submit_final`。参数为 `work_id`、该 work 的 `version`、`title`、`text`。示例：`client.submit_final(work_id, version, "最终交付", "成果、测试依据和内部评审结论")`。
+- 同一份最终交付重试不会新增审批卡片。人类批准后链状态为 `done`；要求修订或明确重新打开时，进入新的 `epoch`。旧分配、旧消息回复和旧运行回调不能自动启动这一轮。
+- 新的成员消息默认 `mail`；确有工作要启动时显式选择 `send`，需要具体答案时选择 `request_reply`。第一次回答 `request_reply` 可唤起请求者；回复的回复、重复回答及结案消息为不打断的 Mail。不要通过新的工作请求来发送纯回执。
+- `inbox.claim` 只领取有效工作，不领取 Mail。静默通知仍可用 `inbox.list` / `inbox.read` 查看；处理 Mail 不代表需要启动新的模型轮次。旧版外部 SDK 应同步更新发送方式和结果回报逻辑。
+- 最终交付状态由控制服务持久保存。聊天中说“完成”“请确认”不会代替提交/验收操作；Agent 不能自行批准或重新打开最终交付。仅文本接口成员仍可作为内部任务执行者，由具备协作工具的队长统筹和提交最终交付。
 
 ## MCP 工具 / HTTP 操作
 
@@ -99,6 +110,7 @@ HTTP：`POST /agent/v1`，请求头 `Authorization: Bearer <成员凭据>`，JSO
 | `teams_history` | `message.history` | 最近共享群历史，不产生已读确认 |
 | `teams_inbox_list` / `teams_inbox_read` | `inbox.list` / `inbox.read` | 查看收件箱 / 显式读取 |
 | `teams_task_list/create/update` | `task.list/create/update` | 分配任务、查看依赖、提交结果 |
+| `teams_submit_final` | `work.submit` | 队长提交唯一的最终交付，等待人类验收 |
 | `teams_request_human/status` | `human.request/status` | 异步请求人类决策与查询答复 |
 | `teams_set_status` | `actor.status` | 更新 focus / blocked |
 | SDK 专用 | `session.connect/heartbeat`, `inbox.claim`, `delivery.ack` | 外部运行器接入、心跳、领取和传输确认 |

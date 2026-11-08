@@ -77,13 +77,14 @@ class CoreTest(unittest.TestCase):
         self.c.messages.recover(self.g, d['id'], 'retry')
         self.assertEqual(1, len(self.c.messages.inbox(self.p, self.g, claim=True)))
 
-    def test_human_review_blocks_dependencies(self):
+    def test_internal_completion_releases_dependencies(self):
         t = self.c.tasks.create(HUMAN, self.g, dict(title='first', agent_id='one'))
         u = self.c.tasks.create(HUMAN, self.g, dict(title='second', agent_id='two', depends_on=[t['id']]))
-        t = self.c.tasks.update(self.p, self.g, t['id'], dict(version=1, action='submit', text='actual result'))
-        with self.assertRaises(Forbidden): self.c.tasks.update(self.p, self.g, t['id'], dict(version=t['version'], action='approve'))
         with self.assertRaises(Conflict): self.c.tasks.update(self.q, self.g, u['id'], dict(version=1, action='submit', text='early'))
-        self.c.tasks.update(HUMAN, self.g, t['id'], dict(version=t['version'], action='approve'))
+        t = self.c.tasks.update(self.p, self.g, t['id'], dict(version=1, action='submit', text='actual result'))
+        self.assertEqual('done', t['status'])
+        self.assertFalse(self.c.repo.list('request'))
+        with self.assertRaises(Forbidden): self.c.tasks.update(self.p, self.g, t['id'], dict(version=t['version'], action='approve'))
         self.c.tasks.update(self.q, self.g, u['id'], dict(version=1, action='submit', text='later'))
         with self.assertRaises(Conflict): self.c.tasks.update(self.q, self.g, u['id'], dict(version=1, action='submit', text='stale'))
 

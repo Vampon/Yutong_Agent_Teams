@@ -10,7 +10,7 @@ class Attention:
         self.access.group(p, gid)
         with self.repo.transaction():
             request = dict(id=uid(), group_id=gid, actor_id=p.actor_id, kind=kind,
-                           title=require_text(title, "标题", 200), detail=str(detail)[:16000],
+                           title=require_text(title, "标题", 200), detail=str(detail)[:100000 if kind == "final_review" else 16000],
                            status="pending", response=None, created=now(), **fields)
             self.repo.put("request", request)
             self.repo.emit(gid, "human.requested", p.actor_id, {"request_id": request["id"], "kind": kind, "title": title})
